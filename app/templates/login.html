@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block titre %}{{ tr('login_title') }}{% endblock %}
+
+{% block contenu %}
+<div class="auth-page-shell">
+    <div class="auth-page-intro">
+        <span class="section-kicker">{{ tr('login_kicker') }}</span>
+        <h1>{{ tr('login_heading') }}</h1>
+        <p>{{ tr('login_intro') }}</p>
+    </div>
+    <div class="auth-page-layout">
+        <div class="card auth-card shadow-sm">
+            <div class="card-body p-4 p-lg-5">
+                <div class="auth-card-heading">
+                    <span class="auth-card-icon" aria-hidden="true">↗</span>
+                    <h2>{{ tr('login_title') }}</h2>
+                </div>
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label">{{ tr('username') }}</label>
+                        <input type="text" class="form-control" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ tr('password') }}</label>
+                        <input type="password" class="form-control" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">{{ tr('login_action') }}</button>
+                </form>
+            </div>
+        </div>
+        <aside class="auth-side-panel">
+            <span class="section-kicker">NovaDoc OCR</span>
+            <h2>{{ tr('login_side_title') }}</h2>
+            <p>{{ tr('login_side_text') }}</p>
+            <ul class="auth-benefits">
+                <li><i>✓</i>{{ tr('login_benefit_one') }}</li>
+                <li><i>✓</i>{{ tr('login_benefit_two') }}</li>
+                <li><i>✓</i>{{ tr('login_benefit_three') }}</li>
+            </ul>
+        </aside>
+    </div>
+</div>
+{% endblock %}

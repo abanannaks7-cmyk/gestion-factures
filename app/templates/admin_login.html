@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block titre %}Admin — Connexion{% endblock %}
+
+{% block contenu %}
+<div class="card p-4 mx-auto" style="max-width:520px;">
+    <h4>Connexion administrateur</h4>
+    <form method="post" action="{{ url_for('main.admin_login', next=request.args.get('next') or '') }}">
+        <div class="mb-3">
+            <label class="form-label">Utilisateur</label>
+            <input type="text" name="username" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Mot de passe</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+        <button class="btn btn-primary" type="submit">Se connecter</button>
+    </form>
+</div>
+{% endblock %}

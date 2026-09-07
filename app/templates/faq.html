@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block titre %}{{ tr('faq_page_title') }}{% endblock %}
+
+{% block contenu %}
+<div class="page-shell simple-page faq-page">
+    <div class="page-intro">
+        <span class="section-kicker">{{ tr('help_center') }}</span>
+        <h1>{{ tr('faq_title') }}</h1>
+        <p>{{ tr('faq_intro') }}</p>
+    </div>
+    <div class="faq-list">
+        {% for f in faqs %}
+            <details class="faq-item" {% if loop.first %}open{% endif %}>
+                <summary><span>{{ f.q }}</span><b aria-hidden="true">+</b></summary>
+                <p>{{ f.a }}</p>
+            </details>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

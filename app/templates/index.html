@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% block titre %}{{ tr('dashboard_title') }}{% endblock %}
+
+{% block contenu %}
+<div class="dashboard-shell">
+    <div class="hero-panel p-4 mb-4">
+        <div class="hero-scene" aria-hidden="true">
+            <div class="scene-grid"></div>
+            <div class="scene-orbit scene-orbit-one"></div>
+            <div class="scene-orbit scene-orbit-two"></div>
+            <div class="scene-core"></div>
+            <span class="scene-particle scene-particle-one"></span>
+            <span class="scene-particle scene-particle-two"></span>
+            <span class="scene-particle scene-particle-three"></span>
+            <span class="scene-particle scene-particle-four"></span>
+            <span class="scene-scanline"></span>
+        </div>
+        <div class="row align-items-center g-3">
+            <div class="col-lg-8">
+                <span class="hero-eyebrow">{{ tr('document_intelligence') }}</span>
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <img src="{{ url_for('static', filename='logos/novadoc-logo.svg') }}" alt="NovaDoc logo" class="hero-logo"/>
+                    <h1 class="fw-bold mb-0">NovaDoc OCR</h1>
+                </div>
+                <h2 class="fw-semibold mb-3">{{ tr('hero_title') }}</h2>
+                <p class="mb-0">{{ tr('hero_description') }}</p>
+            </div>
+            <div class="col-lg-4">
+                <div class="hero-status-panel">
+                    <div class="status-panel-heading">
+                        <span class="status-pulse"></span>
+                        <span>{{ tr('document_flow') }}</span>
+                        <span class="status-live">{{ tr('active') }}</span>
+                    </div>
+                    <div class="status-line"><span>{{ tr('reception') }}</span><strong>{{ tr('automatic') }}</strong></div>
+                    <div class="status-line"><span>{{ tr('ocr_analysis') }}</span><strong>{{ tr('real_time') }}</strong></div>
+                    <a href="{{ url_for('main.upload') }}" class="btn btn-primary fw-bold w-100 mt-3">{{ tr('upload_nav') }} <span aria-hidden="true">→</span></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="capability-strip mb-4" aria-label="Fonctionnalités principales">
+        <div class="capability-item"><span class="capability-index">01</span><div><strong>{{ tr('capture') }}</strong><small>{{ tr('capture_text') }}</small></div></div>
+        <div class="capability-item"><span class="capability-index">02</span><div><strong>{{ tr('structured') }}</strong><small>{{ tr('structured_text') }}</small></div></div>
+        <div class="capability-item"><span class="capability-index">03</span><div><strong>{{ tr('tracking') }}</strong><small>{{ tr('tracking_text') }}</small></div></div>
+    </div>
+
+    <section class="intro-section mb-5">
+        <div>
+            <span class="section-kicker">{{ tr('operations_heading') }}</span>
+            <h2>{{ tr('useful_data') }}</h2>
+        </div>
+        <p>{{ tr('operations_text') }}</p>
+    </section>
+
+    <section class="motion-showcase mb-5" aria-labelledby="showcase-title">
+        <div class="showcase-copy">
+            <span class="section-kicker">{{ tr('in_motion') }}</span>
+            <h2 id="showcase-title">{{ tr('document_place') }}</h2>
+            <p>{{ tr('processing_text') }}</p>
+            <a href="{{ url_for('main.upload') }}" class="showcase-link">{{ tr('start_processing') }} <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="showcase-window" role="region" aria-label="Aperçu animé du traitement OCR">
+            <div class="showcase-window-topbar"><span></span><span></span><span></span><strong>novadoc / processing</strong></div>
+            <div class="showcase-stage">
+                <div class="showcase-orbit"></div>
+                <div class="document-card document-card-back"><span>RAPPORT</span><strong>maintenance.pdf</strong><small>Analyse terminée</small></div>
+                <div class="document-card document-card-main"><span class="document-type">FACTURE</span><strong>facture_2024.pdf</strong><div class="document-lines"><i></i><i></i><i></i></div><small><b>OCR</b> Extraction en cours</small></div>
+                <div class="showcase-check">✓</div>
+            </div>
+            <div class="showcase-progress"><span></span></div>
+            <div class="showcase-footer"><span>{{ tr('processing_active') }}</span><strong>{{ ok }} {{ tr('documents_processed') }}</strong></div>
+        </div>
+    </section>
+
+    <div class="row mb-4 g-3">
+        <div class="col-md-4">
+            <div class="stat-box p-3 text-center">
+                <h6>{{ tr('total_documents') }}</h6>
+                <h2 class="fw-bold stat-number">{{ total }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-box p-3 text-center">
+                <h6>{{ tr('successfully_processed') }}</h6>
+                <h2 class="fw-bold stat-number text-success">{{ ok }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-box p-3 text-center">
+                <h6>{{ tr('pending_failure') }}</h6>
+                <h2 class="fw-bold stat-number text-warning">{{ en_attente }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="card search-panel mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">{{ tr('search') }}</label>
+                    <input name="recherche" value="{{ recherche }}" class="form-control form-control-dark" placeholder="{{ tr('search_placeholder') }}">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">{{ tr('type') }}</label>
+                    <select name="type_document" class="form-select form-select-dark">
+                        <option value="">{{ tr('all') }}</option>
+                        <option value="facture" {% if filtre_type == 'facture' %}selected{% endif %}>{{ tr('invoice') }}</option>
+                        <option value="rapport_maintenance" {% if filtre_type == 'rapport_maintenance' %}selected{% endif %}>{{ tr('report') }}</option>
+                        <option value="doc_technique" {% if filtre_type == 'doc_technique' %}selected{% endif %}>{{ tr('technical') }}</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">{{ tr('ocr_status') }}</label>
+                    <select name="statut_ocr" class="form-select form-select-dark">
+                        <option value="">{{ tr('all') }}</option>
+                        <option value="ok" {% if filtre_statut == 'ok' %}selected{% endif %}>{{ tr('ok') }}</option>
+                        <option value="echec" {% if filtre_statut == 'echec' %}selected{% endif %}>{{ tr('failure') }}</option>
+                        <option value="en_attente" {% if filtre_statut == 'en_attente' %}selected{% endif %}>{{ tr('pending') }}</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">{{ tr('start_date') }}</label>
+                    <input type="date" name="date_debut" value="{{ date_debut }}" class="form-control form-control-dark">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">{{ tr('end_date') }}</label>
+                    <input type="date" name="date_fin" value="{{ date_fin }}" class="form-control form-control-dark">
+                </div>
+                <div class="col-md-1 d-grid">
+                    <button type="submit" class="btn btn-primary">{{ tr('filter') }}</button>
+                </div>
+            </form>
+            <div class="quick-filters" aria-label="Filtres rapides">
+                <span class="quick-filters-label">{{ tr('quick_filters') }}</span>
+                <a class="quick-filter {% if not filtre_statut and not filtre_anomalie %}is-active{% endif %}" href="{{ url_for('main.accueil') }}">{{ tr('all') }}</a>
+                <a class="quick-filter {% if filtre_statut == 'ok' %}is-active{% endif %}" href="{{ url_for('main.accueil', statut_ocr='ok') }}">{{ tr('ok') }}</a>
+                <a class="quick-filter {% if filtre_statut == 'echec' %}is-active{% endif %}" href="{{ url_for('main.accueil', statut_ocr='echec') }}">{{ tr('failure') }}</a>
+                <a class="quick-filter quick-filter-warning {% if filtre_anomalie == '1' %}is-active{% endif %}" href="{{ url_for('main.accueil', anomalie='1') }}">{{ tr('anomalies') }}</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-header mb-3">
+        <div>
+            <h4 class="mb-1">{{ tr('imported_documents') }}</h4>
+            <p class="small mb-0">{{ tr('documents_description') }}</p>
+        </div>
+        <div class="toolbar-actions">
+            <form id="bulkActionsForm" method="POST" action="{{ url_for('main.documents_bulk_delete') }}" onsubmit="return confirm({{ tr('delete_confirm')|tojson }});">
+                <input type="hidden" name="selected_ids" value="">
+                <button type="submit" class="btn btn-outline-danger">{{ tr('delete_selected') }}</button>
+            </form>
+            <form id="bulkExportForm" method="POST" action="{{ url_for('main.documents_bulk_export') }}">
+                <input type="hidden" name="selected_ids" value="">
+                <button type="submit" class="btn btn-outline-light">{{ tr('export_csv') }}</button>
+            </form>
+            <a href="{{ url_for('main.upload') }}" class="btn btn-primary">{{ tr('import_short') }}</a>
+        </div>
+    </div>
+
+{% if documents %}
+<div class="card documents-table-card shadow-sm mb-4">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <form id="documentsTableForm">
+            <table class="table table-hover align-middle mb-0 modern-table text-white">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width:40px;"><input id="selectAll" type="checkbox" aria-label="{{ tr('select_all') }}"></th>
+                        <th>{{ tr('file') }}</th>
+                        <th>{{ tr('type') }}</th>
+                        <th>{{ tr('invoice_number') }}</th>
+                        <th>{{ tr('supplier') }}</th>
+                        <th>{{ tr('invoice_date') }}</th>
+                        <th>{{ tr('amount') }}</th>
+                        <th>{{ tr('ocr_status') }}</th>
+                        <th>{{ tr('imported_at') }}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+            {% for doc in documents %}
+            <tr>
+                <td class="table-select" data-label="{{ tr('select_document') }}"><input class="selectItem" type="checkbox" name="selected_ids" value="{{ doc.id }}" aria-label="{{ tr('select_document') }} {{ doc.nom_fichier }}"></td>
+                <td class="table-file" data-label="{{ tr('file') }}">{{ doc.nom_fichier }}</td>
+                <td class="table-type" data-label="{{ tr('type') }}"><span class="badge badge-secondary">{{ doc.type_document }}</span></td>
+                <td class="table-number" data-label="{{ tr('invoice_number') }}">{{ doc.numero_facture or "-" }}</td>
+                <td data-label="{{ tr('supplier') }}">
+                    <div class="d-flex align-items-center gap-2">
+                        {% if doc.logo_asset %}
+                            <img src="{{ url_for('static', filename='logos/' ~ doc.logo_asset ~ '.svg') }}" alt="Logo fournisseur" class="supplier-logo" loading="lazy">
+                        {% endif %}
+                        <span>{{ doc.fournisseur or "-" }}</span>
+                    </div>
+                </td>
+                <td class="table-date" data-label="{{ tr('invoice_date') }}">{{ doc.date_facture or "-" }}</td>
+                <td class="table-amount" data-label="{{ tr('amount') }}">{{ doc.montant_ttc or "-" }}</td>
+                <td data-label="{{ tr('ocr_status') }}">
+                    {% if doc.statut_ocr == "ok" %}
+                        <span class="badge badge-success">{{ tr('ok') }}</span>
+                    {% elif doc.statut_ocr == "echec" %}
+                        <span class="badge badge-danger">{{ tr('failure') }}</span>
+                        <small class="ocr-failure-reason">{% if doc.texte_ocr %}{{ tr('ocr_analysis_error') }}{% else %}{{ tr('ocr_no_text') }}{% endif %}</small>
+                    {% else %}
+                        <span class="badge badge-warning">{{ tr('pending') }}</span>
+                    {% endif %}
+                </td>
+                <td class="table-date" data-label="{{ tr('imported_at') }}">{{ doc.date_upload.strftime("%d/%m/%Y %H:%M") }}</td>
+                <td class="table-action" data-label="{{ tr('view') }}">
+                    <a href="{{ url_for('main.detail', doc_id=doc.id) }}" class="btn btn-sm btn-outline-primary">{{ tr('view') }}</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+            </form>
+        </div>
+    </div>
+</div>
+{% if pages > 1 %}
+<nav class="documents-pagination" aria-label="Pagination des documents">
+    {% if page > 1 %}
+        <a class="pagination-link" href="{{ url_for('main.accueil', recherche=recherche, type_document=filtre_type, statut_ocr=filtre_statut, anomalie=filtre_anomalie, date_debut=date_debut, date_fin=date_fin, page=page - 1) }}">←</a>
+    {% endif %}
+    <span>{{ page }} / {{ pages }}</span>
+    {% if page < pages %}
+        <a class="pagination-link" href="{{ url_for('main.accueil', recherche=recherche, type_document=filtre_type, statut_ocr=filtre_statut, anomalie=filtre_anomalie, date_debut=date_debut, date_fin=date_fin, page=page + 1) }}">→</a>
+    {% endif %}
+</nav>
+{% endif %}
+{% else %}
+<div class="alert alert-info">{{ tr('no_documents') }}</div>
+{% endif %}
+
+    <section class="partners-section">
+        <span class="section-kicker">{{ tr('supported_documents') }}</span>
+        <div class="partner-logos" aria-label="Types de documents pris en charge">
+            <span>FACTURES</span>
+            <span>RAPPORTS</span>
+            <span>FICHES TECHNIQUES</span>
+            <span>ARCHIVES PDF</span>
+        </div>
+    </section>
+
+    <section class="closing-panel">
+        <div>
+            <span class="section-kicker">{{ tr('ready_to_accelerate') }}</span>
+            <h2>{{ tr('import_next') }}</h2>
+        </div>
+        <a href="{{ url_for('main.upload') }}" class="btn btn-primary">{{ tr('start_now') }} <span aria-hidden="true">→</span></a>
+    </section>
+{% endblock %}

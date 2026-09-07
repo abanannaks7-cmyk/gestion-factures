@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block titre %}{{ tr('contact_page_title') }}{% endblock %}
+
+{% block contenu %}
+<div class="page-shell contact-page">
+    <div class="page-intro">
+        <span class="section-kicker">{{ tr('contact_kicker') }}</span>
+        <h1>{{ tr('contact_title') }}</h1>
+        <p>{{ tr('contact_intro') }}</p>
+    </div>
+    <div class="contact-layout">
+        <div class="contact-aside">
+            <div class="contact-signal"><i></i> {{ tr('team_available') }}</div>
+            <p>{{ tr('contact_detail') }}</p>
+            <div class="contact-line"><span>Email</span><strong>abdeassamadhanouni4@gmail.com</strong></div>
+            <div class="contact-line"><span>{{ tr('average_delay') }}</span><strong>{{ tr('one_day') }}</strong></div>
+        </div>
+        <form class="card contact-form" method="post" action="{{ url_for('main.contact') }}">
+        <div class="mb-3">
+            <label class="form-label">Nom</label>
+            <input type="text" name="nom" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Sujet</label>
+            <input type="text" name="sujet" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Message</label>
+            <textarea name="message" rows="6" class="form-control" required></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">{{ tr('send_message') }} <span aria-hidden="true">→</span></button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block titre %}{{ tr('signup_title') }}{% endblock %}
+
+{% block contenu %}
+<div class="row justify-content-center auth-shell">
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4 mb-3">{{ tr('signup_title') }}</h2>
+                <p class="text-muted">{{ tr('signup_intro') }}</p>
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label">{{ tr('username') }}</label>
+                        <input type="text" class="form-control" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ tr('email') }}</label>
+                        <input type="email" class="form-control" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ tr('password') }}</label>
+                        <input type="password" class="form-control" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ tr('confirm_password') }}</label>
+                        <input type="password" class="form-control" name="confirm_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">{{ tr('signup_action') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

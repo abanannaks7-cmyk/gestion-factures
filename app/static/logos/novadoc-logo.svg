@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-labelledby="logo-title logo-desc">
+  <title id="logo-title">NovaDoc</title>
+  <desc id="logo-desc">Monogramme lumineux NovaDoc formant une lettre N fluide.</desc>
+  <defs>
+    <linearGradient id="trace-main" x1="22" y1="96" x2="100" y2="24" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#35D07F"/>
+      <stop offset="0.48" stop-color="#F4FFF8"/>
+      <stop offset="0.72" stop-color="#7CE5D8"/>
+      <stop offset="1" stop-color="#35D07F"/>
+    </linearGradient>
+    <linearGradient id="trace-color" x1="20" y1="86" x2="101" y2="35" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#159957"/>
+      <stop offset="0.5" stop-color="#D9FFF0"/>
+      <stop offset="1" stop-color="#6BE5A4"/>
+    </linearGradient>
+    <radialGradient id="logo-glow" cx="50%" cy="50%" r="52%">
+      <stop stop-color="#35D07F" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#101416" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft-glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="2.4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect x="6" y="6" width="108" height="108" rx="27" fill="#101416"/>
+  <circle cx="60" cy="60" r="48" fill="url(#logo-glow)"/>
+
+  <!-- Fluid N monogram: one continuous gesture with a returning loop. -->
+  <path d="M25 91 C25 91 25 42 35 35 C43 29 48 38 52 49 L68 87 C72 97 79 96 85 84 C91 72 91 45 95 31" fill="none" stroke="#101416" stroke-linecap="round" stroke-linejoin="round" stroke-width="11" opacity="0.9"/>
+  <path d="M25 91 C25 91 25 42 35 35 C43 29 48 38 52 49 L68 87 C72 97 79 96 85 84 C91 72 91 45 95 31" fill="none" stroke="url(#trace-main)" stroke-linecap="round" stroke-linejoin="round" stroke-width="5.2" filter="url(#soft-glow)"/>
+  <path d="M25 91 C25 91 29 101 38 96 C48 90 57 67 66 48 C73 33 83 24 95 31" fill="none" stroke="url(#trace-color)" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" opacity="0.88"/>
+  <path d="M29 89 C35 91 42 83 47 72" fill="none" stroke="#F4FFF8" stroke-linecap="round" stroke-width="1.2" opacity="0.9"/>
+  <circle cx="25" cy="91" r="3" fill="#F4FFF8"/>
+  <circle cx="95" cy="31" r="2.5" fill="#6BE5A4"/>
+</svg>

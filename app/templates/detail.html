@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block titre %}{{ doc.nom_fichier }}{% endblock %}
+
+{% block contenu %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="d-flex align-items-center gap-3">
+        <img src="{{ url_for('static', filename='logos/' ~ doc.logo_asset ~ '.svg') }}" alt="Logo fournisseur" class="supplier-logo-large">
+        <div>
+            <h4>{{ doc.nom_fichier }}</h4>
+            <div class="text-muted">{{ doc.fournisseur or 'Fournisseur inconnu' }}</div>
+        </div>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-sm btn-outline-secondary" id="previewBtn">Aperçu</button>
+        <form method="POST" action="{{ url_for('main.supprimer', doc_id=doc.id) }}" onsubmit="return confirm('Supprimer ce document ?');">
+            <button class="btn btn-outline-danger btn-sm">Supprimer</button>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Champs extraits (modifiables)</h5>
+                <form method="POST" action="{{ url_for('main.modifier', doc_id=doc.id) }}">
+                    <div class="mb-3">
+                        <label class="form-label">N° Facture</label>
+                        <input type="text" name="numero_facture" class="form-control"
+                               value="{{ doc.numero_facture or '' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fournisseur</label>
+                        <input type="text" name="fournisseur" class="form-control"
+                               value="{{ doc.fournisseur or '' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Date facture</label>
+                        <input type="text" name="date_facture" class="form-control"
+                               value="{{ doc.date_facture or '' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Montant TTC</label>
+                        <input type="text" name="montant_ttc" class="form-control"
+                               value="{{ doc.montant_ttc or '' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Type de panne</label>
+                        <input type="text" name="type_panne" class="form-control"
+                               value="{{ doc.type_panne or '' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Durée de maintenance</label>
+                        <input type="text" name="duree_maintenance" class="form-control"
+                               value="{{ doc.duree_maintenance or '' }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enregistrer les corrections</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Texte brut extrait par l'OCR</h5>
+                <pre class="bg-light p-3 rounded" style="white-space: pre-wrap; max-height: 500px; overflow-y: auto;">{{ doc.texte_ocr or "Aucun texte extrait." }}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<a href="{{ url_for('main.accueil') }}" class="btn btn-secondary">&larr; Retour au tableau de bord</a>
+
+<!-- Preview Modal -->
+<div class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-fullscreen-sm-down">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="previewModalLabel">Aperçu — {{ doc.nom_fichier }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+            </div>
+            <div class="modal-body" style="min-height:60vh;">
+                <iframe id="previewFrame" src="" style="width:100%; height:70vh; border:0;" title="Aperçu du document"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+        const previewBtn = document.getElementById('previewBtn');
+        const previewFrame = document.getElementById('previewFrame');
+        if (previewBtn) {
+                previewBtn.addEventListener('click', () => {
+                        const url = '{{ url_for("main.uploaded_file", filename=doc.nom_fichier) }}';
+                        previewFrame.src = url;
+                        const modal = new bootstrap.Modal(document.getElementById('previewModal'));
+                        modal.show();
+                });
+        }
+</script>
+{% endblock %}

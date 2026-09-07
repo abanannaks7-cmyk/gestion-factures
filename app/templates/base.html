@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="{{ current_language }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block titre %}Gestion Documentaire{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.accueil') }}">
+                <img src="{{ url_for('static', filename='logos/novadoc-logo.svg') }}" alt="NovaDoc logo" class="brand-mark"/>
+                <span>NovaDoc OCR</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="{{ url_for('main.accueil') }}">{{ tr('dashboard') }}</a>
+                <a class="nav-link" href="{{ url_for('main.upload') }}">{{ tr('upload_nav') }}</a>
+                <a class="nav-link" href="{{ url_for('main.faq') }}">{{ tr('faq') }}</a>
+                <a class="nav-link" href="{{ url_for('main.contact') }}">{{ tr('contact') }}</a>
+                <a class="nav-link" href="{{ url_for('main.apropos') }}">{{ tr('about') }}</a>
+                {% if session.get('admin_authenticated') %}
+                    <a class="nav-link" href="{{ url_for('main.admin_contacts') }}">{{ tr('admin') }}</a>
+                    <a class="nav-link" href="{{ url_for('main.admin_logout') }}">{{ tr('logout') }}</a>
+                {% elif session.get('user_id') %}
+                    <a class="nav-link" href="{{ url_for('main.logout') }}">{{ tr('logout') }}</a>
+                {% else %}
+                    <a class="nav-link" href="{{ url_for('main.login') }}">{{ tr('login') }}</a>
+                    <a class="nav-link" href="{{ url_for('main.signup') }}">{{ tr('signup') }}</a>
+                {% endif %}
+            </div>
+
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="language-control" aria-label="{{ tr('language') }}">
+                        <span class="language-icon" aria-hidden="true">◎</span>
+                        <a class="language-option {% if current_language == 'fr' %}is-active{% endif %}" href="{{ url_for('main.set_language', language='fr', next=request.full_path) }}" lang="fr">FR</a>
+                        <span class="language-divider" aria-hidden="true">/</span>
+                        <a class="language-option {% if current_language == 'en' %}is-active{% endif %}" href="{{ url_for('main.set_language', language='en', next=request.full_path) }}" lang="en">EN</a>
+                    </div>
+                    <button id="themeToggle" type="button" class="theme-toggle" aria-label="{{ tr('light_mode') }}" aria-pressed="false" data-dark-label="{{ tr('dark_mode') }}" data-light-label="{{ tr('light_mode') }}">
+                        <span class="theme-icon theme-icon-sun" aria-hidden="true">☀</span>
+                        <span class="theme-icon theme-icon-moon" aria-hidden="true">☾</span>
+                        <span class="theme-toggle-thumb" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for categorie, message in messages %}
+                    <div class="alert alert-{{ categorie }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block contenu %}{% endblock %}
+    </div>
+
+    <footer class="site-footer">
+        <div class="site-footer-inner">
+            <div class="site-footer-brand">
+                <img src="{{ url_for('static', filename='logos/novadoc-logo.svg') }}" alt="NovaDoc logo" class="footer-mark">
+                <div>
+                    <strong>NovaDoc OCR</strong>
+                    <p>{{ tr('footer_tagline') }}</p>
+                </div>
+            </div>
+            <nav class="site-footer-links" aria-label="Navigation secondaire">
+                <a href="{{ url_for('main.accueil') }}">{{ tr('dashboard') }}</a>
+                <a href="{{ url_for('main.upload') }}">{{ tr('upload_nav') }}</a>
+                <a href="{{ url_for('main.faq') }}">{{ tr('faq') }}</a>
+                <a href="{{ url_for('main.contact') }}">{{ tr('contact') }}</a>
+            </nav>
+            <div class="site-footer-meta">
+                <span class="footer-status"><i></i> {{ tr('system_operational') }}</span>
+                <span>© {{ current_year }} NovaDoc</span>
+            </div>
+        </div>
+    </footer>
+
+    <div class="assistant-widget" id="assistantWidget">
+        <button type="button" class="assistant-toggle assistant-btn" id="assistantToggle" aria-expanded="false" aria-controls="assistantPanel">
+            <span class="assistant-toggle-icon" aria-hidden="true">✦</span>
+            <span>{{ tr('assistant') }}</span>
+        </button>
+        <div class="assistant-panel hidden" id="assistantPanel" role="dialog" aria-modal="false" aria-labelledby="assistantTitle" aria-hidden="true" data-fallback="{{ tr('assistant_fallback') }}" data-error="{{ tr('assistant_error') }}">
+            <div class="assistant-header">
+                <div>
+                    <div class="assistant-title-row">
+                        <span class="assistant-avatar" aria-hidden="true">N</span>
+                        <strong id="assistantTitle">{{ tr('assistant') }}</strong>
+                    </div>
+                    <div class="text-muted small">{{ tr('assistant_help') }}</div>
+                    <div class="text-success small">
+                        {% if openai_enabled %}
+                            {{ 'OpenAI AI enabled' if current_language == 'en' else 'IA OpenAI activée' }}
+                        {% else %}
+                            {{ 'Local mode enabled — configure OPENAI_API_KEY in .env' if current_language == 'en' else 'Mode local activé — configure OPENAI_API_KEY dans .env' }}
+                        {% endif %}
+                    </div>
+                </div>
+                <button type="button" class="assistant-close" id="assistantClose" aria-label="{{ tr('close') }}">&times;</button>
+            </div>
+            <div id="assistantMessages" class="assistant-messages" role="log" aria-live="polite" aria-relevant="additions">
+                <div class="assistant-message assistant-message-bot">
+                    {{ tr('assistant_greeting') }}
+                </div>
+            </div>
+            <div class="assistant-input-group">
+                <input id="assistantInput" type="text" class="form-control form-control-dark" placeholder="{{ tr('assistant_placeholder') }}" aria-label="{{ tr('assistant') }}">
+                <button id="assistantSend" class="btn btn-primary" data-send-label="{{ tr('assistant_send') }}" data-processing-label="{{ tr('processing') }}">{{ tr('assistant_send') }}</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        const assistantWidget = document.getElementById('assistantWidget');
+        const assistantToggle = document.getElementById('assistantToggle');
+        const assistantPanel = document.getElementById('assistantPanel');
+        const assistantClose = document.getElementById('assistantClose');
+        const assistantInput = document.getElementById('assistantInput');
+        const assistantMessages = document.getElementById('assistantMessages');
+        const assistantSend = document.getElementById('assistantSend');
+
+        function toggleAssistant() {
+            const isOpen = assistantPanel.classList.toggle('hidden') === false;
+            assistantToggle.setAttribute('aria-expanded', String(isOpen));
+            assistantPanel.setAttribute('aria-hidden', String(!isOpen));
+            if (isOpen) {
+                assistantInput.focus();
+            }
+        }
+
+        function addAssistantMessage(message, fromBot = false) {
+            const messageBlock = document.createElement('div');
+            messageBlock.className = fromBot ? 'assistant-message assistant-message-bot' : 'assistant-message assistant-message-user';
+            messageBlock.textContent = message;
+            assistantMessages.appendChild(messageBlock);
+            assistantMessages.scrollTop = assistantMessages.scrollHeight;
+        }
+
+        async function sendAssistantMessage() {
+            const text = assistantInput.value.trim();
+            if (!text || assistantSend.disabled) {
+                return;
+            }
+            addAssistantMessage(text, false);
+            assistantInput.value = '';
+            assistantSend.disabled = true;
+            assistantSend.textContent = assistantSend.dataset.processingLabel;
+            try {
+                const response = await fetch('{{ url_for("main.assistant_query") }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: text }),
+                });
+                if (!response.ok) {
+                    throw new Error(`Assistant request failed: ${response.status}`);
+                }
+                const data = await response.json();
+                const answer = data.answer || assistantPanel.dataset.fallback;
+                addAssistantMessage(answer, true);
+            } catch (error) {
+                addAssistantMessage(assistantPanel.dataset.error, true);
+            } finally {
+                assistantSend.disabled = false;
+                assistantSend.textContent = assistantSend.dataset.sendLabel;
+                assistantInput.focus();
+            }
+        }
+
+        function closeAssistant() {
+            if (!assistantPanel.classList.contains('hidden')) {
+                assistantPanel.classList.add('hidden');
+                assistantPanel.setAttribute('aria-hidden', 'true');
+                assistantToggle.setAttribute('aria-expanded', 'false');
+            }
+        }
+
+        assistantToggle.addEventListener('click', toggleAssistant);
+        assistantClose.addEventListener('click', toggleAssistant);
+        assistantSend.addEventListener('click', sendAssistantMessage);
+        assistantInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendAssistantMessage();
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                closeAssistant();
+            }
+        });
+        document.addEventListener('click', (event) => {
+            if (!assistantWidget.contains(event.target)) {
+                closeAssistant();
+            }
+        });
+
+        const themeToggle = document.getElementById('themeToggle');
+        const storedTheme = localStorage.getItem('site-theme');
+
+        function applyTheme(mode) {
+            const navbar = document.querySelector('nav.navbar');
+            if (mode === 'light') {
+                document.body.classList.add('light-theme');
+                themeToggle.classList.add('is-light');
+                themeToggle.setAttribute('aria-label', themeToggle.dataset.darkLabel);
+                themeToggle.setAttribute('aria-pressed', 'true');
+                if (navbar) {
+                    navbar.classList.remove('navbar-dark');
+                    navbar.classList.add('navbar-light');
+                }
+            } else {
+                document.body.classList.remove('light-theme');
+                themeToggle.classList.remove('is-light');
+                themeToggle.setAttribute('aria-label', themeToggle.dataset.lightLabel);
+                themeToggle.setAttribute('aria-pressed', 'false');
+                if (navbar) {
+                    navbar.classList.remove('navbar-light');
+                    navbar.classList.add('navbar-dark');
+                }
+            }
+            localStorage.setItem('site-theme', mode);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const nextTheme = document.body.classList.contains('light-theme') ? 'dark' : 'light';
+            applyTheme(nextTheme);
+        });
+
+        if (storedTheme) {
+            applyTheme(storedTheme);
+        }
+
+        // Auto-dismiss messages after 5 seconds
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }, 5000);
+        });
+
+        // Bulk select handling for documents table
+        const selectAll = document.getElementById('selectAll');
+        if (selectAll) {
+            selectAll.addEventListener('change', () => {
+                document.querySelectorAll('.selectItem').forEach(cb => cb.checked = selectAll.checked);
+            });
+
+            // Before submitting bulk forms, collect selected ids
+            const bulkDeleteForm = document.getElementById('bulkActionsForm');
+            const bulkExportForm = document.getElementById('bulkExportForm');
+            function collectSelectedIds() {
+                const ids = Array.from(document.querySelectorAll('.selectItem:checked')).map(cb => cb.value);
+                return ids;
+            }
+            if (bulkDeleteForm) {
+                bulkDeleteForm.addEventListener('submit', (e) => {
+                    const ids = collectSelectedIds();
+                    if (ids.length === 0) {
+                        e.preventDefault();
+                        alert('Sélectionne au moins un document.');
+                        return;
+                    }
+                    // clear previous inputs
+                    bulkDeleteForm.querySelectorAll('input[name="selected_ids"]').forEach(i => i.remove());
+                    ids.forEach(id => {
+                        const inp = document.createElement('input');
+                        inp.type = 'hidden';
+                        inp.name = 'selected_ids';
+                        inp.value = id;
+                        bulkDeleteForm.appendChild(inp);
+                    });
+                });
+            }
+            if (bulkExportForm) {
+                bulkExportForm.addEventListener('submit', (e) => {
+                    const ids = collectSelectedIds();
+                    if (ids.length === 0) {
+                        e.preventDefault();
+                        alert('Sélectionne au moins un document.');
+                        return;
+                    }
+                    bulkExportForm.querySelectorAll('input[name="selected_ids"]').forEach(i => i.remove());
+                    ids.forEach(id => {
+                        const inp = document.createElement('input');
+                        inp.type = 'hidden';
+                        inp.name = 'selected_ids';
+                        inp.value = id;
+                        bulkExportForm.appendChild(inp);
+                    });
+                });
+            }
+        }
+    </script>
+</body>
+</html>

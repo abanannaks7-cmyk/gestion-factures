@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block titre %}{{ tr('about_page_title') }}{% endblock %}
+
+{% block contenu %}
+<div class="page-shell about-page">
+    <div class="page-intro about-intro">
+        <span class="section-kicker">{{ tr('about_kicker') }}</span>
+        <h1>{{ tr('about_title') }}</h1>
+        <p>{{ tr('about_intro') }}</p>
+    </div>
+    <div class="about-capabilities">
+        <article><span>01</span><h2>{{ tr('collect') }}</h2><p>{{ tr('collect_text') }}</p></article>
+        <article><span>02</span><h2>{{ tr('understand') }}</h2><p>{{ tr('understand_text') }}</p></article>
+        <article><span>03</span><h2>{{ tr('decide') }}</h2><p>{{ tr('decide_text') }}</p></article>
+    </div>
+    <div class="about-note"><strong>Une approche centrée sur l'essentiel.</strong><span>Moins de saisie manuelle. Plus de visibilité sur vos opérations.</span></div>
+</div>
+{% endblock %}

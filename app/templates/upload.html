@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block titre %}{{ tr('upload_page_title') }}{% endblock %}
+
+{% block contenu %}
+<div class="page-shell upload-page">
+    <div class="page-intro">
+        <span class="section-kicker">{{ tr('new_processing') }}</span>
+        <h1>{{ tr('upload_title') }}</h1>
+        <p>{{ tr('upload_intro') }}</p>
+    </div>
+    <div class="upload-layout">
+        <div class="card upload-panel">
+            <div class="card-body p-4 p-lg-5">
+                <form id="uploadForm" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">{{ tr('document_type') }}</label>
+                        <select name="type_document" class="form-select">
+                            <option value="facture">Facture</option>
+                            <option value="doc_technique">Document technique</option>
+                            <option value="rapport_maintenance">Rapport de maintenance</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">{{ tr('ocr_language') }}</label>
+                        <select name="langue" class="form-select">
+                            <option value="fra+eng+ara">Français / Anglais / Arabe</option>
+                            <option value="fra+eng">Français + Anglais</option>
+                            <option value="fra">Français</option>
+                            <option value="eng">Anglais</option>
+                            <option value="ara">Arabe</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">{{ tr('file_label') }}</label>
+                        <label class="upload-dropzone">
+                            <input type="file" name="fichier" accept=".pdf,.png,.jpg,.jpeg" required>
+                            <span class="upload-dropzone-icon" aria-hidden="true">↑</span>
+                            <strong>{{ tr('choose_file') }}</strong>
+                            <small>{{ tr('file_hint') }}</small>
+                        </label>
+                    </div>
+                    <button id="uploadSubmit" type="submit" class="btn btn-primary w-100 btn-lg">
+                        {{ tr('start_ocr') }}
+                    </button>
+                    <p id="uploadStatus" class="small text-muted mt-3 mb-0" role="status" aria-live="polite" hidden>
+                        {{ tr('processing') }}
+                    </p>
+                </form>
+            </div>
+        </div>
+        <aside class="process-card">
+            <span class="section-kicker">{{ tr('how_it_works') }}</span>
+            <h2>{{ tr('simple_flow') }}</h2>
+            <ol class="process-steps">
+                <li><span>01</span><div><strong>{{ tr('import_step') }}</strong><small>{{ tr('select_document') }}</small></div></li>
+                <li><span>02</span><div><strong>{{ tr('analyse_step') }}</strong><small>{{ tr('ocr_identifies') }}</small></div></li>
+                <li><span>03</span><div><strong>{{ tr('use_step') }}</strong><small>{{ tr('use_data') }}</small></div></li>
+            </ol>
+        </aside>
+    </div>
+</div>
+<script>
+    document.getElementById('uploadForm').addEventListener('submit', function () {
+        const button = document.getElementById('uploadSubmit');
+        const status = document.getElementById('uploadStatus');
+        button.disabled = true;
+        button.setAttribute('aria-busy', 'true');
+        status.hidden = false;
+    });
+</script>
+{% endblock %}
