@@ -1380,6 +1380,22 @@ body.light-theme .hero-logo {
     font-weight: 800;
 }
 
+.alert::after {
+    position: absolute;
+    top: 0;
+    right: 1.2rem;
+    width: 5rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(224, 190, 116, 0.75), transparent);
+    content: "";
+    animation: messageTrace 5.5s ease-in-out infinite;
+}
+
+@keyframes messageTrace {
+    0%, 100% { opacity: 0.15; transform: translateX(1.5rem); }
+    50% { opacity: 0.85; transform: translateX(-1.5rem); }
+}
+
 .alert-success {
     border-color: rgba(94, 230, 167, 0.25);
     border-left-color: #4ade80;
@@ -1400,6 +1416,10 @@ body.light-theme .hero-logo {
     content: "!";
 }
 
+.alert-warning::after {
+    background: linear-gradient(90deg, transparent, rgba(251, 191, 36, 0.75), transparent);
+}
+
 .alert-danger {
     border-color: rgba(248, 113, 113, 0.34);
     border-left-color: #f87171;
@@ -1414,6 +1434,10 @@ body.light-theme .hero-logo {
     content: "×";
 }
 
+.alert-danger::after {
+    background: linear-gradient(90deg, transparent, rgba(248, 113, 113, 0.7), transparent);
+}
+
 .alert-info {
     border-color: rgba(56, 189, 248, 0.28);
     border-left-color: #38bdf8;
@@ -1425,6 +1449,10 @@ body.light-theme .hero-logo {
     background: rgba(125, 211, 252, 0.09);
     color: #a5e8ff;
     content: "i";
+}
+
+.alert-info::after {
+    background: linear-gradient(90deg, transparent, rgba(125, 211, 252, 0.7), transparent);
 }
 
 .alert .btn-close {
@@ -1498,12 +1526,29 @@ body.light-theme .alert-info::before {
     color: #2563eb;
 }
 
+body.light-theme .alert::after {
+    background: linear-gradient(90deg, transparent, rgba(184, 135, 53, 0.65), transparent);
+}
+
+body.light-theme .alert-warning::after {
+    background: linear-gradient(90deg, transparent, rgba(217, 119, 6, 0.65), transparent);
+}
+
+body.light-theme .alert-danger::after {
+    background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.6), transparent);
+}
+
+body.light-theme .alert-info::after {
+    background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.6), transparent);
+}
+
 body.light-theme .alert .btn-close {
     filter: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .alert {
+    .alert,
+    .alert::after {
         animation: none;
     }
 }
