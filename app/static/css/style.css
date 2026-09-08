@@ -3485,6 +3485,16 @@ body.light-theme .documents-table-card .supplier-logo {
     50% { box-shadow: 0 22px 54px rgba(94, 230, 167, 0.12); }
 }
 
+@keyframes luxuryBorder {
+    0%, 100% { border-color: rgba(94, 230, 167, 0.22); }
+    50% { border-color: rgba(224, 190, 116, 0.42); }
+}
+
+@keyframes luxuryFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
 .dashboard-shell > .hero-panel,
 .dashboard-shell > .capability-strip,
 .dashboard-shell > .intro-section,
@@ -3516,11 +3526,11 @@ body.light-theme .documents-table-card .supplier-logo {
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: linear-gradient(105deg, transparent 25%, rgba(255, 255, 255, 0.08) 48%, transparent 68%);
+    background: linear-gradient(105deg, transparent 25%, rgba(224, 190, 116, 0.1) 48%, transparent 68%);
     content: "";
     pointer-events: none;
     transform: translateX(-120%);
-    animation: premiumShimmer 8s ease-in-out infinite;
+    animation: premiumShimmer 12s ease-in-out infinite;
 }
 
 .hero-status-panel,
@@ -3528,6 +3538,15 @@ body.light-theme .documents-table-card .supplier-logo {
 .process-card,
 .documents-table-card {
     transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 320ms ease, border-color 320ms ease;
+}
+
+.hero-status-panel {
+    animation: luxuryBorder 5s ease-in-out infinite;
+}
+
+.hero-panel .hero-logo,
+.hero-panel .brand-mark {
+    animation: luxuryFloat 6s ease-in-out infinite;
 }
 
 .hero-status-panel:hover,
@@ -3565,7 +3584,10 @@ body.light-theme .documents-table-card .supplier-logo {
     .dashboard-shell > *,
     .page-shell > *,
     .hero-panel::after,
-    .dashboard-shell .stat-number {
+    .dashboard-shell .stat-number,
+    .hero-status-panel,
+    .hero-panel .hero-logo,
+    .hero-panel .brand-mark {
         animation: none !important;
     }
 
