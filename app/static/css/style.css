@@ -891,6 +891,27 @@ body:not(.light-theme) .assistant-panel .assistant-messages .assistant-message-u
     }
 }
 
+body.light-theme .hero-panel::after {
+    background: linear-gradient(105deg, transparent 25%, rgba(184, 135, 53, 0.1) 48%, transparent 68%);
+}
+
+body.light-theme .hero-status-panel {
+    animation-name: luxuryBorderLight;
+}
+
+@keyframes luxuryBorderLight {
+    0%, 100% { border-color: rgba(21, 153, 87, 0.18); }
+    50% { border-color: rgba(184, 135, 53, 0.4); }
+}
+
+body.light-theme .hero-status-panel:hover,
+body.light-theme .stat-box:hover,
+body.light-theme .process-card:hover,
+body.light-theme .documents-table-card:hover {
+    border-color: rgba(184, 135, 53, 0.34);
+    box-shadow: 0 20px 44px rgba(16, 72, 43, 0.12), 0 0 26px rgba(184, 135, 53, 0.08);
+}
+
 @keyframes glowPulse {
     from {
         box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.06);
