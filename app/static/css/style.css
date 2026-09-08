@@ -4727,7 +4727,8 @@ body.light-theme .closing-panel h2 {
 
 .upload-panel .form-label,
 .contact-form .form-label {
-    color: #b8c7c0 !important;
+    color: #d4e3da !important;
+    font-weight: 600;
 }
 
 .upload-panel .form-select,
@@ -4736,6 +4737,12 @@ body.light-theme .closing-panel h2 {
     min-height: 48px;
     border-color: rgba(53, 208, 127, 0.2) !important;
     background: rgba(16, 20, 22, 0.8) !important;
+    color: #edf8f1 !important;
+}
+
+.upload-panel .form-select option {
+    background: #101416;
+    color: #edf8f1;
 }
 
 .upload-dropzone {
@@ -4782,7 +4789,7 @@ body.light-theme .closing-panel h2 {
 
 .upload-dropzone small,
 .process-steps small {
-    color: rgba(203, 213, 225, 0.62);
+    color: rgba(220, 234, 225, 0.76);
 }
 
 .process-card {
@@ -4796,6 +4803,10 @@ body.light-theme .closing-panel h2 {
     font-size: clamp(1.8rem, 3vw, 2.8rem);
     letter-spacing: -0.04em;
     line-height: 1.05;
+}
+
+.process-card .section-kicker {
+    color: #d5e8dc !important;
 }
 
 .process-steps {
@@ -4823,7 +4834,7 @@ body.light-theme .closing-panel h2 {
 
 .process-steps strong {
     display: block;
-    color: #f4f7f5;
+    color: #f4f8f5;
 }
 
 .process-steps small {
