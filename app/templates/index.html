@@ -187,12 +187,12 @@
                 <td class="table-file" data-label="{{ tr('file') }}">{{ doc.nom_fichier }}</td>
                 <td class="table-type" data-label="{{ tr('type') }}"><span class="badge badge-secondary">{{ doc.type_document }}</span></td>
                 <td class="table-number" data-label="{{ tr('invoice_number') }}">{{ doc.numero_facture or "-" }}</td>
-                <td data-label="{{ tr('supplier') }}">
-                    <div class="d-flex align-items-center gap-2">
+                <td class="table-supplier" data-label="{{ tr('supplier') }}">
+                    <div class="supplier-cell">
                         {% if doc.logo_asset %}
                             <img src="{{ url_for('static', filename='logos/' ~ doc.logo_asset ~ '.svg') }}" alt="Logo fournisseur" class="supplier-logo" loading="lazy">
                         {% endif %}
-                        <span>{{ doc.fournisseur or "-" }}</span>
+                        <span class="supplier-name">{{ doc.fournisseur or "-" }}</span>
                     </div>
                 </td>
                 <td class="table-date" data-label="{{ tr('invoice_date') }}">{{ doc.date_facture or "-" }}</td>
