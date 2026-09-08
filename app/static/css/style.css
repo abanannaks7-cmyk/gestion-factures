@@ -3646,7 +3646,7 @@ body.light-theme .navbar .nav-pill .nav-link-featured:not(.is-active) {
     width: 92%;
     height: 1px;
     overflow: hidden;
-    background: rgba(148, 163, 184, 0.18);
+    display: none;
 }
 
 .editorial-flow-track::after {
