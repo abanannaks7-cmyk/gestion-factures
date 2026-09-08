@@ -3463,6 +3463,123 @@ body.light-theme .documents-table-card .supplier-logo {
     background: #f2f8f4;
 }
 
+/* Premium motion layer: restrained, soft and consistent with the NovaDoc palette. */
+@keyframes premiumReveal {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes premiumShimmer {
+    0%, 55% { transform: translateX(-120%); }
+    100% { transform: translateX(120%); }
+}
+
+@keyframes premiumGlow {
+    0%, 100% { box-shadow: 0 18px 42px rgba(2, 12, 31, 0.24); }
+    50% { box-shadow: 0 22px 54px rgba(94, 230, 167, 0.12); }
+}
+
+.dashboard-shell > .hero-panel,
+.dashboard-shell > .capability-strip,
+.dashboard-shell > .intro-section,
+.dashboard-shell > .motion-showcase,
+.dashboard-shell > .row,
+.dashboard-shell > .search-panel,
+.dashboard-shell > .section-header,
+.dashboard-shell > .documents-table-card,
+.page-shell > .page-intro,
+.page-shell > .upload-layout,
+.page-shell > .contact-layout {
+    animation: premiumReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dashboard-shell > *:nth-child(2) { animation-delay: 80ms; }
+.dashboard-shell > *:nth-child(3) { animation-delay: 140ms; }
+.dashboard-shell > *:nth-child(4) { animation-delay: 200ms; }
+.dashboard-shell > *:nth-child(5) { animation-delay: 260ms; }
+.dashboard-shell > *:nth-child(6) { animation-delay: 320ms; }
+.dashboard-shell > *:nth-child(7) { animation-delay: 380ms; }
+
+.hero-panel,
+.documents-table-card,
+.search-panel {
+    isolation: isolate;
+}
+
+.hero-panel::after {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(105deg, transparent 25%, rgba(255, 255, 255, 0.08) 48%, transparent 68%);
+    content: "";
+    pointer-events: none;
+    transform: translateX(-120%);
+    animation: premiumShimmer 8s ease-in-out infinite;
+}
+
+.hero-status-panel,
+.stat-box,
+.process-card,
+.documents-table-card {
+    transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 320ms ease, border-color 320ms ease;
+}
+
+.hero-status-panel:hover,
+.stat-box:hover,
+.process-card:hover {
+    border-color: rgba(94, 230, 167, 0.34);
+    transform: translateY(-4px);
+    box-shadow: 0 22px 48px rgba(2, 12, 31, 0.3), 0 0 30px rgba(94, 230, 167, 0.08);
+}
+
+.documents-table-card:hover {
+    border-color: rgba(94, 230, 167, 0.28);
+    box-shadow: 0 22px 52px rgba(2, 12, 31, 0.3), 0 0 34px rgba(94, 230, 167, 0.06);
+}
+
+.dashboard-shell .stat-number {
+    animation: premiumGlow 4.5s ease-in-out infinite;
+}
+
+.btn-primary,
+.quick-filter,
+.pagination-link,
+.documents-table-card .btn-outline-primary {
+    transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 220ms ease, background 220ms ease, border-color 220ms ease;
+}
+
+.btn-primary:active,
+.quick-filter:active,
+.pagination-link:active,
+.documents-table-card .btn-outline-primary:active {
+    transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-shell > *,
+    .page-shell > *,
+    .hero-panel::after,
+    .dashboard-shell .stat-number {
+        animation: none !important;
+    }
+
+    .hero-status-panel,
+    .stat-box,
+    .process-card,
+    .documents-table-card,
+    .btn-primary,
+    .quick-filter,
+    .pagination-link {
+        transition: none !important;
+    }
+}
+
 /* Keep the document list fully visible without a horizontal scrollbar. */
 .documents-table-card .table-responsive {
     overflow-x: hidden;
