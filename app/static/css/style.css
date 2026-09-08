@@ -916,6 +916,48 @@ body:not(.light-theme) .assistant-panel .assistant-messages .assistant-message-u
     opacity: 0.55;
 }
 
+@keyframes statTrace {
+    0%, 12% { left: -34%; opacity: 0; }
+    20% { opacity: 0.9; }
+    72% { opacity: 0.42; }
+    100% { left: 108%; opacity: 0; }
+}
+
+@keyframes statNumberReveal {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+        letter-spacing: 0.08em;
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        letter-spacing: -0.04em;
+    }
+}
+
+.dashboard-shell .stat-box::after {
+    position: absolute;
+    top: 0;
+    left: -34%;
+    width: 34%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 238, 188, 0.9), transparent);
+    content: "";
+    animation: statTrace 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    pointer-events: none;
+}
+
+.dashboard-shell .row > .col-md-4:nth-child(2) .stat-box::after { animation-delay: 1.2s; }
+.dashboard-shell .row > .col-md-4:nth-child(3) .stat-box::after { animation-delay: 2.4s; }
+
+.dashboard-shell .stat-box h2.stat-number {
+    animation: statNumberReveal 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.dashboard-shell .row > .col-md-4:nth-child(2) h2.stat-number { animation-delay: 120ms; }
+.dashboard-shell .row > .col-md-4:nth-child(3) h2.stat-number { animation-delay: 240ms; }
+
 .dashboard-shell .stat-box:hover {
     border-color: rgba(224, 190, 116, 0.38);
     box-shadow: 0 22px 42px rgba(2, 12, 31, 0.24);
@@ -969,6 +1011,17 @@ body.light-theme .dashboard-shell .stat-box h2.stat-number.text-success {
 
 body.light-theme .dashboard-shell .stat-box h2.stat-number.text-warning {
     color: #9a6b1e !important;
+}
+
+body.light-theme .dashboard-shell .stat-box::after {
+    background: linear-gradient(90deg, transparent, rgba(184, 135, 53, 0.72), transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dashboard-shell .stat-box::after,
+    .dashboard-shell .stat-box h2.stat-number {
+        animation: none !important;
+    }
 }
 
 body.light-theme .hero-panel::after {
